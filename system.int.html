@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In</title>
+    <!-- Google API JavaScript SDK -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="https://accounts.google.com/InteractiveLogin/signinchooser?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&emr=1&ltmpl=default&ltmplcache=2&osid=1&passive=true&rm=false&scc=1&service=mail&ss=1&ifkv=AcMMx-djXsPgJlmdDUmh870xUAHXTCxzfD3YI-3WvxeFqrpzi2dFhbSah_mELEwHlfJSg8peFGV0fw&ddm=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin.apps.googleusercontent.com">
+    <script>
+        function onSignIn(googleUser) {
+            // Google хэрэглэгчийн мэдээллийг авах
+            var profile = googleUser.getBasicProfile();
+            document.getElementById("user-info").innerHTML = `
+                <h2>Welcome, ${profile.getName()}!</h2>
+                <p>Email: ${profile.getEmail()}</p>
+                <img src="${profile.getImageUrl()}" alt="User Image" style="border-radius: 50%; width:100px; height:100px;">
+            `;
+            document.getElementById("sign-out-btn").style.display = "block";
+        }
+        
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                document.getElementById("user-info").innerHTML = "<p>You have signed out.</p>";
+                document.getElementById("sign-out-btn").style.display = "none";
+            });
+        }
+    </script>
+</head>
+<body>
+    <!-- Google Sign-In Button -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    
+    <!-- User Info Display -->
+    <div id="user-info"></div>
+    
+    <!-- Sign-Out Button -->
+    <button id="sign-out-btn" onclick="signOut()" style="display: none;">Sign Out</button>
+</body>
+</html>
